@@ -75,3 +75,9 @@ df = df.groupBy('cliente_id').agg({'valor_liquido':'sum'})
 df_final = df.join(df_cliente, df.cliente_id == df_cliente.cliente_id, 'inner')\
             .select("nome","sum(valor_liquido)")\
             .withColumnRenamed("sum(valor_liquido)","total_liquido")
+
+
+# Saves the DF as parquet so it can be used again
+df_final.write.format("parquet")\
+            .mode("overwrite")\
+            .save(consume_path)
